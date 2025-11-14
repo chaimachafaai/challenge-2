@@ -35,14 +35,25 @@ struct VoiceMemosView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
-                        ScrollView {
-                            LazyVStack(spacing: 12) {
-                                ForEach(viewModel.voiceMemos) { memo in
-                                    VoiceMemoRow(memo: memo, viewModel: viewModel)
-                                }
+//                        ScrollView {
+//                            LazyVStack(spacing: 12) {
+//                                ForEach(viewModel.voiceMemos) { memo in
+//                                    VoiceMemoRow(memo: memo, viewModel: viewModel)
+//                                }
+//                            }
+//                            .padding()
+//                        }
+                        
+                        List {
+                            ForEach(viewModel.voiceMemos) { memo in
+                                VoiceMemoRow(memo: memo, viewModel: viewModel)
+                                    .listRowBackground(Color.black)
                             }
-                            .padding()
+                            .onDelete(perform: deleteAt)
                         }
+                        .listStyle(.plain)
+                        .scrollContentBackground(.hidden)
+                        .background(Color.black)
                     }
                     
                     // Barre de contrôle d'enregistrement
@@ -122,6 +133,13 @@ struct VoiceMemosView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
         }
     }
+    
+    func deleteAt(at offsets: IndexSet) {
+        for index in offsets {
+            let memo = viewModel.voiceMemos[index]
+            viewModel.deleteMemo(memo)
+        }
+    }
 }
 
 struct VoiceMemoRow: View {
@@ -164,13 +182,13 @@ struct VoiceMemoRow: View {
                 }
                 
                 // Bouton de suppression
-                Button(action: {
-                    viewModel.deleteMemo(memo)
-                }) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                        .font(.title3)
-                }
+//                Button(action: {
+//                    viewModel.deleteMemo(memo)
+//                }) {
+//                    Image(systemName: "trash")
+//                        .foregroundColor(.red)
+//                        .font(.title3)
+//                }
             }
             
             // Transcription
